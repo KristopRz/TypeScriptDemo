@@ -19,15 +19,15 @@ export abstract class PriceCalculator {
     }
 
     private getBasicPrice(selectedYear: ServiceYear): number {
-        const basicPriceConfig: PriceConfigServices[] = this.getBasicPriceConfig();
-        const selectedPriceConfig: PriceConfigServices | undefined = basicPriceConfig.find((x: PriceConfigServices) => x.year === selectedYear);
+        const basicPriceConfig = this.getBasicPriceConfig();
+        const selectedPriceConfig = basicPriceConfig.find(x => x.year === selectedYear);
         return selectedPriceConfig ? selectedPriceConfig.price : 0;
     }
 
     private getDiscounts(selectedYear: ServiceYear, selectedServices: ServiceType[]): PriceConfigDiscount[] {
-        const discountsConfig: PriceConfigDiscount[] = this.getDiscountsConfig();
-        return discountsConfig.filter((x: PriceConfigDiscount) => x.year === selectedYear &&
-            x.subServices.every((subService: ServiceType) => selectedServices.includes(subService)));
+        const discountsConfig = this.getDiscountsConfig();
+        return discountsConfig.filter(x => x.year === selectedYear &&
+            x.subServices.every(subService => selectedServices.includes(subService)));
     }
 
     public calc(selectedServices: ServiceType[], selectedYear: ServiceYear, countedServices: ServiceType[]): PriceResult {
@@ -35,13 +35,13 @@ export abstract class PriceCalculator {
             return { basePrice: 0, finalPrice: 0, countedServices: countedServices };
         }
 
-        const newCountedServices: ServiceType[] = [...countedServices, this.getNameService()];
-        const basePrice: number = this.getBasicPrice(selectedYear);
-        const discounts: PriceConfigDiscount[] = this.getDiscounts(selectedYear, selectedServices);
-        let finalPrice: number = basePrice;
+        const newCountedServices = [...countedServices, this.getNameService()];
+        const basePrice = this.getBasicPrice(selectedYear);
+        const discounts = this.getDiscounts(selectedYear, selectedServices);
+        let finalPrice = basePrice;
 
         if (discounts.length > 0) {
-            finalPrice = Math.min(...discounts.map((x: PriceConfigDiscount) => x.price));
+            finalPrice = Math.min(...discounts.map(discount => discount.price));
             newCountedServices.push(...this.getAdditionalServicesToCountedWhenDiscount());
         }
 
