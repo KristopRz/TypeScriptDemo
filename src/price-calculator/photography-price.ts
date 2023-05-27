@@ -6,7 +6,7 @@ export class PhotographyPrice extends PriceCalculator {
         return 'Photography';
     }
 
-    protected getAdditionalServicesToCountedWhenDiscount(): ServiceType[] {
+    protected getAdditionalServicesToCountedWhenDiscountApplied(): ServiceType[] {
         return ['VideoRecording'];
     }
 

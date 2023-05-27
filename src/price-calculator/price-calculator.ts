@@ -14,7 +14,7 @@ export abstract class PriceCalculator {
         return [];
     }
 
-    protected getAdditionalServicesToCountedWhenDiscount(): ServiceType[] {
+    protected getAdditionalServicesToCountedWhenDiscountApplied(): ServiceType[] {
         return [];
     }
 
@@ -42,7 +42,7 @@ export abstract class PriceCalculator {
 
         if (discounts.length > 0) {
             finalPrice = Math.min(...discounts.map(discount => discount.price));
-            newCountedServices.push(...this.getAdditionalServicesToCountedWhenDiscount());
+            newCountedServices.push(...this.getAdditionalServicesToCountedWhenDiscountApplied());
         }
 
         return { basePrice, finalPrice, countedServices: newCountedServices }

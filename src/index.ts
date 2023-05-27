@@ -65,13 +65,13 @@ function selectAction(previouslySelectedServices: ServiceType[], service: Servic
 }
 
 ////////////////////////////////////////////////////// DESELECT LOGIC //////////////////////////////////////////////////////////
-function findAllMainServices(subService: ServiceType): ServiceType[] {
+function getAllMainServices(subService: ServiceType): ServiceType[] {
     return relatedConfigServices
         .filter(configService => configService.subServices.includes(subService))
         .map(configService => configService.mainService);
 }
 
-function findSubServices(mainService: ServiceType): ServiceType[] {
+function getSubServices(mainService: ServiceType): ServiceType[] {
     const relevantConfigService = relatedConfigServices.find(configService =>
         configService.mainService === mainService
     );
@@ -79,17 +79,17 @@ function findSubServices(mainService: ServiceType): ServiceType[] {
     return relevantConfigService ? relevantConfigService.subServices : [];
 }
 
-function findExclusiveSubServices(previouslySelectedServices: ServiceType[], service: ServiceType): ServiceType[] {
-    const subServices = findSubServices(service);
+function getExclusiveSubServices(previouslySelectedServices: ServiceType[], service: ServiceType): ServiceType[] {
+    const subServices = getSubServices(service);
 
     return subServices.filter(subService => {
-        const otherMainServices = findAllMainServices(subService).filter(mainService => mainService !== service);
+        const otherMainServices = getAllMainServices(subService).filter(mainService => mainService !== service);
         return otherMainServices.some(otherMainService => previouslySelectedServices.includes(otherMainService)) === false;
     });
 }
 
 function deselectAction(previouslySelectedServices: ServiceType[], service: ServiceType): ServiceType[] {
-    const subServicesToDeselect = findExclusiveSubServices(previouslySelectedServices, service);
+    const subServicesToDeselect = getExclusiveSubServices(previouslySelectedServices, service);
     return previouslySelectedServices.filter(selectedService => selectedService !== service && subServicesToDeselect.includes(selectedService) === false);
 }
 
